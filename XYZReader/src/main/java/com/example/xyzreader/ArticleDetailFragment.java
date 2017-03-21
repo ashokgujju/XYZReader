@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,12 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                     mArticleBody.setText(Html.fromHtml(cursor.getString(ArticleLoader.Query.BODY)));
                 }
                 mArticleTitle.setText(cursor.getString(ArticleLoader.Query.TITLE));
-                mArticleByLine.setText(cursor.getString(ArticleLoader.Query.AUTHOR));
+                mArticleByLine.setText(DateUtils.getRelativeTimeSpanString(
+                        cursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+                        System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                        DateUtils.FORMAT_ABBREV_ALL).toString()
+                        + " by "
+                        + cursor.getString(ArticleLoader.Query.AUTHOR));
             }
 
         }
