@@ -1,12 +1,15 @@
-package com.example.xyzreader;
+package com.example.xyzreader.ui;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -15,19 +18,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ashok on 20/3/17.
  */
 
 public class ArticleDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String ARG_ITEM_ID = "item_id";
-    private long mItemId;
 
     @BindView(R.id.backdrop)
     ImageView mBackdrop;
@@ -37,6 +40,11 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     TextView mArticleTitle;
     @BindView(R.id.article_byline)
     TextView mArticleByLine;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    public static final String ARG_ITEM_ID = "item_id";
+    private long mItemId;
 
     public ArticleDetailFragment() {
     }
@@ -69,6 +77,14 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @OnClick(R.id.share)
+    public void shareArticle() {
+        startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                .setType("text/plain")
+                .setText(getString(R.string.sample_text))
+                .getIntent(), getString(R.string.action_share)));
     }
 
     @Override
